@@ -1,0 +1,24 @@
+services:
+  fastapi:
+    build: .
+    container_name: fastapi
+    ports:
+      - "8000:8000"
+
+  k6-performance-test:
+    image: grafana/k6
+    container_name: k6-performance-test
+    volumes:
+      - ./performance_test.js:/scripts/performance_test.js
+    depends_on:
+      - fastapi
+    entrypoint: ["k6", "run", "/scripts/performance_test.js"]
+
+  k6-soak-test:
+    image: grafana/k6
+    container_name: k6-soak-test
+    volumes:
+      - ./soak_test.js:/scripts/soak_test.js
+    depends_on:
+      - fastapi
+    entrypoint: ["k6", "run", "/scripts/soak_test.js"]
