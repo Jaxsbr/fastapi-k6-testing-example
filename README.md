@@ -61,3 +61,8 @@ k6-soak-test         | running (10m08.1s), 0/5 VUs, 367 complete and 0 interrupt
 k6-soak-test         | default ✓ [ 100% ] 5 VUs  10m0s
 k6-soak-test exited with code 0
 ```
+
+## Difference Between Performance and Soak Testing
+Performance Testing: Focuses on measuring the system's speed, responsiveness, and stability under peak or variable load over a short period (seconds to minutes). It identifies performance bottlenecks and scalability issues.
+
+Soak Testing: Evaluates the system's long-term stability under constant, moderate load over an extended period (hours to days). It helps detect memory leaks, resource exhaustion, or performance degradation over time.
