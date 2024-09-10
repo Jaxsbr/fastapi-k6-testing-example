@@ -7,7 +7,7 @@ export let options = {
 };
 
 export default function () {
-  const res = http.get('http://fastapi:8000/api/random');
+  const res = http.get('http://fastapi:8000/api/orchestrate');
 
   check(res, {
     'is status 200': (r) => r.status === 200,

@@ -1,25 +1,25 @@
 {
-  "source": "mockoon:8.4.0",
-  "data": [
+  "lastMigration": 32,
+  "name": "New environment",
+  "latency": 0,
+  "port": 3001,
+  "routes": [
     {
-      "name": "External API 1",
-      "port": 3001,
-      "endpoints": [
+      "type": "http",
+      "method": "get",
+      "endpoint": "api/data1",
+      "responses": [
         {
-          "method": "GET",
-          "endpoint": "/api/data1",
-          "responses": [
+          "body": "{\n  \"message\": \"Mock data from external API 1\"\n}",
+          "statusCode": 200,
+          "label": "",
+          "headers": [
             {
-              "statusCode": 200,
-              "body": "{\"message\": \"Mock data from external API 1\"}",
-              "headers": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ]
+              "key": "Content-Type",
+              "value": "application/json"
             }
-          ]
+          ],
+          "bodyType": "INLINE"
         }
       ]
     }

@@ -5,8 +5,8 @@ import os
 app = FastAPI()
 
 # Set external API URLs (can be set through environment variables)
-EXTERNAL_API_1 = os.getenv('EXTERNAL_API_1', 'http://mockoon:3001/api/data1')
-EXTERNAL_API_2 = os.getenv('EXTERNAL_API_2', 'http://mockoon:3002/api/data2')
+EXTERNAL_API_1 = os.getenv('EXTERNAL_API_1', 'http://127.0.0.1:3001/api/data1')
+EXTERNAL_API_2 = os.getenv('EXTERNAL_API_2', 'http://127.0.0.1:3002/api/data2')
 
 @app.get("/api/orchestrate")
 async def orchestrate():
