@@ -5,7 +5,7 @@ FROM python:3.9-slim
 WORKDIR /app
 
 # Install FastAPI and Uvicorn
-RUN pip install fastapi uvicorn
+RUN pip install fastapi uvicorn requests
 
 # Copy the FastAPI app into the container
 COPY app.py /app

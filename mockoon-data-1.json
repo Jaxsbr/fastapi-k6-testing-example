@@ -1,0 +1,27 @@
+{
+  "lastMigration": 32,
+  "name": "New environment",
+  "latency": 0,
+  "port": 3001,
+  "routes": [
+    {
+      "type": "http",
+      "method": "get",
+      "endpoint": "api/data1",
+      "responses": [
+        {
+          "body": "{\n  \"message\": \"Mock data from external API 1\"\n}",
+          "statusCode": 200,
+          "label": "",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE"
+        }
+      ]
+    }
+  ]
+}

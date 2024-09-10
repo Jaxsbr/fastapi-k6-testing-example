@@ -1,12 +1,25 @@
+import requests
 from fastapi import FastAPI
-import random
-import time
+import os
 
 app = FastAPI()
 
-@app.get("/api/random")
-async def get_random():
-    # Simulate random response times between 100ms and 3 seconds
-    delay = random.uniform(0.1, 3)
-    time.sleep(delay)
-    return {"message": "Success", "response_time": f"{delay:.2f} seconds"}
+# Set external API URLs (can be set through environment variables)
+EXTERNAL_API_1 = os.getenv('EXTERNAL_API_1', 'http://127.0.0.1:3001/api/data1')
+EXTERNAL_API_2 = os.getenv('EXTERNAL_API_2', 'http://127.0.0.1:3002/api/data2')
+
+@app.get("/api/orchestrate")
+async def orchestrate():
+    # Call the first external API
+    response1 = requests.get(EXTERNAL_API_1)
+    data1 = response1.json()
+
+    # Call the second external API
+    response2 = requests.get(EXTERNAL_API_2)
+    data2 = response2.json()
+
+    return {
+        "message": "Orchestration successful",
+        "external_data1": data1,
+        "external_data2": data2
+    }

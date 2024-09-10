@@ -4,6 +4,32 @@ services:
     container_name: fastapi
     ports:
       - "8000:8000"
+    environment:
+      EXTERNAL_API_1: http://mockoon_api_1:3001/api/data1
+      EXTERNAL_API_2: http://mockoon_api_2:3002/api/data2
+    depends_on:
+      - mockoon_api_1
+      - mockoon_api_2
+
+  mockoon_api_1:
+    image: mockoon/cli
+    container_name: mockoon_api_1
+    volumes:
+      - ./mockoon-data-1.json:/data/mockoon-data.json
+    entrypoint: ["mockoon-cli"]
+    command: ["start", "--data", "/data/mockoon-data.json"]
+    ports:
+      - "3001:3001"
+
+  mockoon_api_2:
+    image: mockoon/cli
+    container_name: mockoon_api_2
+    volumes:
+      - ./mockoon-data-2.json:/data/mockoon-data.json
+    entrypoint: ["mockoon-cli"]
+    command: ["start", "--data", "/data/mockoon-data.json"]
+    ports:
+      - "3002:3002"
 
   k6-performance-test:
     image: grafana/k6
@@ -12,6 +38,8 @@ services:
       - ./performance_test.js:/scripts/performance_test.js
     depends_on:
       - fastapi
+      - mockoon_api_1
+      - mockoon_api_2
     entrypoint: ["k6", "run", "/scripts/performance_test.js"]
 
   k6-soak-test:
@@ -21,4 +49,6 @@ services:
       - ./soak_test.js:/scripts/soak_test.js
     depends_on:
       - fastapi
+      - mockoon_api_1
+      - mockoon_api_2
     entrypoint: ["k6", "run", "/scripts/soak_test.js"]
