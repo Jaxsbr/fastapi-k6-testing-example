@@ -1,0 +1,27 @@
+{
+  "source": "mockoon:8.4.0",
+  "data": [
+    {
+      "name": "External API 1",
+      "port": 3001,
+      "endpoints": [
+        {
+          "method": "GET",
+          "endpoint": "/api/data1",
+          "responses": [
+            {
+              "statusCode": 200,
+              "body": "{\"message\": \"Mock data from external API 1\"}",
+              "headers": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

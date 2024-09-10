@@ -4,21 +4,77 @@ services:
     container_name: fastapi
     ports:
       - "8000:8000"
-
-  k6-performance-test:
-    image: grafana/k6
-    container_name: k6-performance-test
-    volumes:
-      - ./performance_test.js:/scripts/performance_test.js
+    environment:
+      EXTERNAL_API_1: http://mockoon:3001/api/data1
+      EXTERNAL_API_2: http://mockoon:3002/api/data2
     depends_on:
-      - fastapi
-    entrypoint: ["k6", "run", "/scripts/performance_test.js"]
+      # - mockoon_api
+      - mockoon_api_1
+      - mockoon_api_2
+    networks:
+      - the_network
 
-  k6-soak-test:
-    image: grafana/k6
-    container_name: k6-soak-test
+  # mockoon_api:
+  #   image: mockoon/cli
+  #   container_name: mockoon_api
+  #   entrypoint: ["mockoon-cli"]
+  #   command: ["--version"]
+  #   networks:
+  #     - the_network
+
+  mockoon_api_1:
+    image: mockoon/cli
+    container_name: mockoon_api_1
     volumes:
-      - ./soak_test.js:/scripts/soak_test.js
-    depends_on:
-      - fastapi
-    entrypoint: ["k6", "run", "/scripts/soak_test.js"]
+      - ./mockoon-data-1.json:/data/mockoon-data.json
+    entrypoint: ["mockoon-cli"]
+    command: ["start", "--data", "/data/mockoon-data.json"]
+    ports:
+      - "3001:3001"
+    networks:
+      - the_network
+
+  mockoon_api_2:
+    image: mockoon/cli
+    container_name: mockoon_api_2
+    volumes:
+      - ./mockoon-data-2.json:/data/mockoon-data.json
+    entrypoint: ["mockoon-cli"]
+    command: ["start", "--data", "/data/mockoon-data.json"]
+    ports:
+      - "3002:3002"
+    networks:
+      - the_network
+
+  # mockoon:
+  #   image: mockoon/cli
+  #   container_name: mockoon
+  #   volumes:
+  #     - ./mockoon-data.json:/data/mockoon-data.json
+  #   entrypoint: ["mockoon-cli"]
+  #   command: ["start", "--data", "/data/mockoon-data.json"]
+  #   ports:
+  #     - "3001:3001"   # Mock external API 1
+  #     - "3002:3002"   # Mock external API 2
+
+  # k6-performance-test:
+  #   image: grafana/k6
+  #   container_name: k6-performance-test
+  #   volumes:
+  #     - ./performance_test.js:/scripts/performance_test.js
+  #   depends_on:
+  #     - fastapi
+  #   entrypoint: ["k6", "run", "/scripts/performance_test.js"]
+
+  # k6-soak-test:
+  #   image: grafana/k6
+  #   container_name: k6-soak-test
+  #   volumes:
+  #     - ./soak_test.js:/scripts/soak_test.js
+  #   depends_on:
+  #     - fastapi
+  #   entrypoint: ["k6", "run", "/scripts/soak_test.js"]
+
+networks:
+  the_network:
+    driver: bridge
