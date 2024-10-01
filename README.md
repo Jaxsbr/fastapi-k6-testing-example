@@ -4,23 +4,30 @@
 
 This repository provides an example project that demonstrates how to:
 
-1. Set up a simple **FastAPI** application that simulates random response times.
+1. Set up a simple **FastAPI** application that communicates with mock APIs (using **Mockoon**) instead of real external APIs.
 2. Perform **performance tests** and **soak tests** using **k6**.
-3. Orchestrate both the FastAPI service and k6 tests using **Docker Compose**.
+3. Orchestrate the FastAPI service, Mockoon mock APIs, and k6 tests using **Docker Compose**.
 
-The goal of this project is to help developers learn how to:
+The goal of this project is serve as a lookup project that illustrates how to containerize and load test an api:
 - Build and deploy a Python-based **FastAPI** service.
-- Use **k6** to conduct performance and load testing on an API.
-- Leverage **Docker Compose** to easily spin up services and automate testing.
+- Use **Mockoon** to create realistic mock external APIs, making it easier to develop and test against external dependencies.
+- Use **k6** to conduct performance and load testing on APIs.
+- Leverage **Docker Compose** to easily spin up services, simulate external APIs, and automate testing.
 
 ## Project Structure
 
 ```bash
-├── Dockerfile               # Dockerfile to build the FastAPI service
-├── app.py                   # FastAPI application code with random response times
-├── docker-compose.yml        # Docker Compose file to manage FastAPI and k6 services
-├── performance_test.js       # k6 script for basic performance testing
-└── soak_test.js              # k6 script for soak testing
+├── docker-compose.yml        # Docker Compose file to manage FastAPI, Mockoon, and k6 services
+├── fastapi/
+│   ├── Dockerfile            # Dockerfile to build the FastAPI service
+│   └── app.py                # FastAPI application code with mockoon endpoint calls
+├── mockoon/
+│   ├── Dockerfile            # Dockerfile for Mockoon API service
+│   ├── mockoon-data-1.json   # Declare mock http endpoints
+│   └── mockoon-data-2.json   # Declare mock http endpoints
+└── k6/
+    ├── performance_test.js   # k6 script for basic performance testing
+    └── soak_test.js          # k6 script for soak testing
 ```
 
 ## Run
