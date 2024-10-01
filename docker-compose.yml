@@ -1,6 +1,6 @@
 services:
   fastapi:
-    build: .
+    build: ./fastapi
     container_name: fastapi
     ports:
       - "8000:8000"
@@ -12,20 +12,22 @@ services:
       - mockoon_api_2
 
   mockoon_api_1:
-    image: mockoon/cli
+    # Building mockoon manually from Dockerfile
+    build: ./mockoon
     container_name: mockoon_api_1
     volumes:
-      - ./mockoon-data-1.json:/data/mockoon-data.json
+      - ./mockoon/mockoon-data-1.json:/data/mockoon-data.json
     entrypoint: ["mockoon-cli"]
     command: ["start", "--data", "/data/mockoon-data.json"]
     ports:
       - "3001:3001"
 
   mockoon_api_2:
+    # Using pre built mockoon from image repository
     image: mockoon/cli
     container_name: mockoon_api_2
     volumes:
-      - ./mockoon-data-2.json:/data/mockoon-data.json
+      - ./mockoon/mockoon-data-2.json:/data/mockoon-data.json
     entrypoint: ["mockoon-cli"]
     command: ["start", "--data", "/data/mockoon-data.json"]
     ports:
@@ -35,7 +37,7 @@ services:
     image: grafana/k6
     container_name: k6-performance-test
     volumes:
-      - ./performance_test.js:/scripts/performance_test.js
+      - ./k6:/scripts
     depends_on:
       - fastapi
       - mockoon_api_1
@@ -46,7 +48,7 @@ services:
     image: grafana/k6
     container_name: k6-soak-test
     volumes:
-      - ./soak_test.js:/scripts/soak_test.js
+      - ./k6:/scripts
     depends_on:
       - fastapi
       - mockoon_api_1
